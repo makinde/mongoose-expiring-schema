@@ -16,6 +16,9 @@
   "author": "Makinde Adeagbo <npm@adeagbo.com>",
   "license": "ISC",
   "dependencies": {},
+  "peerDependencies": {
+    "mongoose": ">=5"
+  },
   "devDependencies": {
     "ava": "2.0.0",
     "eslint": "5.16.0",
