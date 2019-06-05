@@ -3,7 +3,7 @@
 
 A schema plugin that allows documents to have expiration dates, and defaults queries to respect these.
 
-This plugin is meant to be used on a class of documents that is only valid for a certain period of time. That mainly means that the document might have a validFrom date (which means it is only valid AFTER the specific time) and an expiresAt date (which means it is only valid until that date). Either of these values can be null, which means the document is valid indefinitely on that end.
+This plugin is meant to be used on a class of documents that is only valid for a certain period of time. That mainly means that the document might have a validFrom date (which means it is only valid AFTER the specific time) and an validUntil date (which means it is only valid until that date). Either of these values can be null, which means the document is valid indefinitely on that end.
 
 When querying for documents that have this plugin, by default, documents will only be returned if they are currently valid.
 
@@ -11,20 +11,19 @@ When querying for documents that have this plugin, by default, documents will on
 
 ```
 const ExpiringSchemaPlugin = require('mongoose-expiring-schema');
-const TicketSchema = new mongoose.Schema({ concertId: String });
+const ticketSchema = new mongoose.Schema({ concertId: String });
 
-TicketSchema.plugin(ExpiringSchemaPlugin);
+ticketSchema.plugin(ExpiringSchemaPlugin);
+const TicketModel = mongoose.model('ticket', ticketSchema);
 
-// Create some new tickets
-// TODO
+// Results will only contain tickets that are currently valid
+const results = await Model.find().exec();
 
-// Results will only contain tickets that are unexpired
-// TODO
-const result = await Model.find({}, 'real_key virtual_key').lean().exec();
-
-// Run a query like this to ignore expiration
-// TODO
+// Results will only contain tickets that were valid on `someDate`
+const results = await Model.find({ validAsOf: someDate }).exec();
 ```
+
+- Note that you can us `null` for `validFrom` or `validUntil` to represent that there is no bound on when it starts being valid or when it stops being valid, respectively.
 
 ### Installing
 

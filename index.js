@@ -1,12 +1,25 @@
 module.exports = function expiringSchema(schema) {
+  const NULL_TYPE = 10;
+
   // Add extra fields to schema
   schema.path('validFrom', Date);
   schema.path('validFrom').default(() => new Date());
   schema.path('validFrom').index(true);
+  schema.path('validFrom').required(true);
 
-  schema.path('expiresAt', Date);
-  schema.path('expiresAt').default(undefined);
-  schema.path('expiresAt').index(true);
+  schema.path('validUntil', Date);
+  schema.path('validUntil').default(null);
+  schema.path('validUntil').index(true);
+  schema.path('validUntil').required(true);
+  schema.path('validUntil').validate({
+    validator(validUntil) {
+      if (validUntil !== null && this.validFrom !== null) {
+        return validUntil > this.validFrom;
+      }
+      return true;
+    },
+    msg: 'validUntil ({VALUE}) must be after validFrom',
+  });
 
   // add preFind hooks
   function preFind(next) {
@@ -14,7 +27,7 @@ module.exports = function expiringSchema(schema) {
 
     if (
       Object.prototype.hasOwnProperty.call(queryConditions, 'validFrom')
-      || Object.prototype.hasOwnProperty.call(queryConditions, 'expiresAt')
+      || Object.prototype.hasOwnProperty.call(queryConditions, 'validUntil')
     ) {
       // The developer is getting their hands dirty and specifying the range
       // themselves. Ball is in their court.
@@ -24,14 +37,19 @@ module.exports = function expiringSchema(schema) {
     const validAsOf = queryConditions.validAsOf || new Date();
     delete queryConditions.validAsOf;
 
-    this.or([
-      { validFrom: { $lte: validAsOf } },
-      { validFrom: undefined },
-    ]);
-
-    this.or([
-      { expiresAt: { $gte: validAsOf } },
-      { expiresAt: undefined },
+    this.and([
+      {
+        $or: [
+          { validFrom: { $lte: validAsOf } },
+          { validFrom: { $type: NULL_TYPE } },
+        ],
+      },
+      {
+        $or: [
+          { validUntil: { $gte: validAsOf } },
+          { validUntil: { $type: NULL_TYPE } },
+        ],
+      },
     ]);
 
     return next();
