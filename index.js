@@ -1,7 +1,7 @@
 module.exports = function expiringSchema(schema) {
   // Add extra fields to schema
   schema.path('validFrom', Date);
-  schema.path('validFrom').default(Date.now);
+  schema.path('validFrom').default(() => new Date());
   schema.path('validFrom').index(true);
 
   schema.path('expiresAt', Date);
@@ -21,7 +21,7 @@ module.exports = function expiringSchema(schema) {
       return next();
     }
 
-    const validAsOf = queryConditions.validAsOf || Date.now();
+    const validAsOf = queryConditions.validAsOf || new Date();
     delete queryConditions.validAsOf;
 
     this.or([
