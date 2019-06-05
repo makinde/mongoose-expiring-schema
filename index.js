@@ -1,6 +1,11 @@
 module.exports = function expiringSchema(schema) {
+  // This will be used to check for `null` in the DB. Mongo will return documents
+  // that don't have a field set if you just query for null the way you'd think.
+  // See: https://docs.mongodb.com/manual/tutorial/query-for-null-fields/
   const NULL_TYPE = 10;
 
+  // Use this to make sure a field is there. If you use `.require(true)` it'll
+  // fail since `null` is valid and false-y.
   function dateNullValidator(val) {
     return val === null || val instanceof Date;
   }
@@ -17,6 +22,7 @@ module.exports = function expiringSchema(schema) {
   schema.path('validUntil').required(dateNullValidator);
   schema.path('validUntil').validate({
     validator(validUntil) {
+      // If dates are specified for both, they must be in the right order
       if (validUntil !== null && this.validFrom !== null) {
         return validUntil > this.validFrom;
       }
