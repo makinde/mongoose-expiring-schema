@@ -1,4 +1,5 @@
 # mongoose-expiring-schema
+[![Build Status](https://travis-ci.org/makinde/mongoose-expiring-schema.svg?branch=master)](https://travis-ci.org/makinde/mongoose-expiring-schema)
 
 A schema plugin that allows documents to have expiration dates, and defaults queries to respect these.
 
