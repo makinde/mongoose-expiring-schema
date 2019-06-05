@@ -1,16 +1,20 @@
 module.exports = function expiringSchema(schema) {
   const NULL_TYPE = 10;
 
+  function dateNullValidator(val) {
+    return val === null || val instanceof Date;
+  }
+
   // Add extra fields to schema
   schema.path('validFrom', Date);
   schema.path('validFrom').default(() => new Date());
   schema.path('validFrom').index(true);
-  schema.path('validFrom').required(true);
+  schema.path('validFrom').required(dateNullValidator);
 
   schema.path('validUntil', Date);
   schema.path('validUntil').default(null);
   schema.path('validUntil').index(true);
-  schema.path('validUntil').required(true);
+  schema.path('validUntil').required(dateNullValidator);
   schema.path('validUntil').validate({
     validator(validUntil) {
       if (validUntil !== null && this.validFrom !== null) {
