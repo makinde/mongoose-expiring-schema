@@ -23,7 +23,7 @@ const results = await Model.find().exec();
 const results = await Model.find({ validAsOf: someDate }).exec();
 ```
 
-- Note that you can us `null` for `validFrom` or `validUntil` to represent that there is no bound on when it starts being valid or when it stops being valid, respectively.
+- Note that you can use `null` for `validFrom` or `validUntil` to represent that there is no bound on when it starts being valid or when it stops being valid, respectively.
 
 ### Installing
 
