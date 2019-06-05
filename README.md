@@ -9,7 +9,7 @@ When querying for documents that have this plugin, by default, documents will on
 
 ## Getting Started
 
-```
+```js
 const ExpiringSchemaPlugin = require('mongoose-expiring-schema');
 const ticketSchema = new mongoose.Schema({ concertId: String });
 
@@ -27,7 +27,7 @@ const results = await Model.find({ validAsOf: someDate }).exec();
 
 ### Installing
 
-```
+```bash
 npm install mongoose-expiring-schema
 ```
 
@@ -35,7 +35,7 @@ npm install mongoose-expiring-schema
 
 Tests written using [`ava`](https://www.npmjs.com/package/ava) framework. Run them using:
 
-```
+```bash
 npm test
 ```
 
