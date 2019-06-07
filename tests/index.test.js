@@ -164,7 +164,16 @@ test('Query handles validAsOf correctly', async (t) => {
     name: SHARED_TICKET_NAME,
     validAsOf: twoAndHalfDaysOut,
   }).exec();
-  t.is(results.length, 3, 'only a single, valid doc should come back');
+  t.is(results.length, 3);
+});
+
+test.only('Count query applies correct filtering', async (t) => {
+  const twoAndHalfDaysOut = new Date(Date.now() + (ONE_DAY * 2.5));
+  const result = await TicketModel.countDocuments({
+    name: SHARED_TICKET_NAME,
+    validAsOf: twoAndHalfDaysOut,
+  }).exec();
+  t.is(result, 3);
 });
 
 test.after.always(async () => {

@@ -14,6 +14,7 @@ module.exports = {
   },
   rules: {
     'ava/no-todo-test': 'off',
-    'ava/no-skip-test': 'warn',
+    'ava/no-skip-test': 'off',
+    'ava/no-only-test': 'off',
   },
 };

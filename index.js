@@ -71,4 +71,6 @@ module.exports = function expiringSchema(schema) {
   schema.pre('findOneAndRemove', preFind);
   schema.pre('findOneAndReplace', preFind);
   schema.pre('findOneAndUpdate', preFind);
+  schema.pre('count', preFind);
+  schema.pre('countDocuments', preFind);
 };
