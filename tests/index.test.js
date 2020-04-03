@@ -28,7 +28,11 @@ let mongoServer;
 test.before(async () => {
   mongoServer = new MongoMemoryServer();
   const uri = await mongoServer.getConnectionString();
-  await mongoose.connect(uri, { useCreateIndex: true, useNewUrlParser: true });
+  await mongoose.connect(uri, {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   await TicketModel.deleteMany({});
 
   // Valid from now until forever
