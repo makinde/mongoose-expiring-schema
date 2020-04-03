@@ -25,6 +25,16 @@ const results = await Model.find({ validAsOf: someDate }).exec();
 
 - Note that you can use `null` for `validFrom` or `validUntil` to represent that there is no bound on when it starts being valid or when it stops being valid, respectively.
 
+## Configuration
+
+defaultValidFilter: You can specify a function that provides a different default query to determine if documents are valid or not. By default, all currently valid documents come back. The function takes a parameter that is a `Date()` representing when "now" is for the query.
+
+ExpiringSchemaPlugin contains a constant that has two options in it:
+- VALID_FILTERS.CURRENT (default): Queries for docs current valid.
+- VALID_FILTERS.CURRENT_AND_FUTURE (default): Queries for docs current or future valid.
+
+Access these via `require('mongoose-expiring-schema').VALID_FILTERS`.
+
 ### Installing
 
 ```bash
