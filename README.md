@@ -27,7 +27,9 @@ const results = await Model.find({ validAsOf: someDate }).exec();
 
 ## Configuration
 
-defaultValidFilter: You can specify a function that provides a different default query to determine if documents are valid or not. By default, all currently valid documents come back. The function takes a parameter that is a `Date()` representing when "now" is for the query.
+- `defaultValidFilter`: You can specify a function that provides a different default query to determine if documents are valid or not. By default, all currently valid documents come back. The function takes a parameter that is a `Date()` representing when "now" is for the query.
+- `get`: You can specify a getter function to be used on both `validUntil` and `validFrom`.
+- `set`: You can specify a setter function to be used on both `validUntil` and `validFrom`.
 
 ExpiringSchemaPlugin contains a constant that has two options in it:
 - VALID_FILTERS.CURRENT (default): Queries for docs current valid.

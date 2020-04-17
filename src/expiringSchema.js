@@ -2,18 +2,26 @@ const dateNullValidator = require('./dateNullValidator');
 const validFilterCurrent = require('./validFilterCurrent');
 
 module.exports = function expiringSchema(schema, installationOptions = {}) {
-  const { defaultValidFilter: validFilter = validFilterCurrent } = installationOptions;
+  const {
+    defaultValidFilter: validFilter = validFilterCurrent,
+    set: setterFn = v => v,
+    get: getterFn = v => v,
+  } = installationOptions;
 
   // Add extra fields to schema
   schema.path('validFrom', Date);
   schema.path('validFrom').default(() => new Date());
   schema.path('validFrom').index(true);
   schema.path('validFrom').required(dateNullValidator);
+  schema.path('validFrom').set(setterFn);
+  schema.path('validFrom').get(getterFn);
 
   schema.path('validUntil', Date);
   schema.path('validUntil').default(null);
   schema.path('validUntil').index(true);
   schema.path('validUntil').required(dateNullValidator);
+  schema.path('validUntil').set(setterFn);
+  schema.path('validUntil').get(getterFn);
   schema.path('validUntil').validate({
     validator(validUntil) {
       // If dates are specified for both, they must be in the right order
