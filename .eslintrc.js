@@ -16,5 +16,6 @@ module.exports = {
     'ava/no-todo-test': 'off',
     'ava/no-skip-test': 'off',
     'ava/no-only-test': 'off',
+    'no-underscore-dangle': 'off',
   },
 };

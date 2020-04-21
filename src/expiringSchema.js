@@ -44,9 +44,8 @@ module.exports = function expiringSchema(schema, installationOptions = {}) {
     const queryUntil = Object.prototype.hasOwnProperty.call(queryConditions, 'validUntil');
     if (queryFrom || queryUntil) return next();
 
-    // If this is a query for a specific id, don't bother the query
-    const filterKeys = Object.keys(queryConditions);
-    if (filterKeys.length === 1 && filterKeys[0] === '_id') return next();
+    // If your query involves an id in any way, just leave it alone.
+    if (queryConditions._id) return next();
 
     const validAsOf = queryConditions.validAsOf || new Date();
     delete queryConditions.validAsOf;
